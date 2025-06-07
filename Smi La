@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Auto Pi Withdrawal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f9f9f9;
+      text-align: center;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+    }
+    button {
+      background-color: #865dff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Send Pi Automatically</h1>
+  <p>Enter the recipient's Pi username or wallet address:</p>
+  <input type="text" id="recipient" placeholder="Pi username or wallet address" />
+  <br>
+  <button onclick="startPayout()">Start Sending Pi</button>
+
+  <p id="status"></p>
+
+  <script>
+    async function startPayout() {
+      const recipient = document.getElementById("recipient").value;
+      const status = document.getElementById("status");
+
+      if (!recipient) {
+        status.textContent = "Please enter a recipient.";
+        return;
+      }
+
+      status.textContent = "Sending request to backend...";
+
+      try {
+        const response = await fetch("https://your-backend-url.com/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ recipient })
+        });
+
+        const result = await response.json();
+        status.textContent = result.message || JSON.stringify(result);
+      } catch (err) {
+        status.textContent = "Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
